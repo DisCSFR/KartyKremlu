@@ -5,22 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Srdce Evropy: Poslední Bašta Svobody</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
         :root {
-            --barva-pozadi: #1a1a1a;
-            --barva-ramu: #8B0000; /* Tmavě červená */
-            --barva-textu: #e0e0e0;
-            --barva-hrace: #004d99;
-            --barva-hrace-svetla: #3385ff;
-            --barva-kgb: #5e0000;
-            --barva-kgb-svetla: #ff3333;
-            --barva-zdroju: #ffd700;
+            --barva-pozadi: #0a0a0f;
+            --barva-ramu: #cc1100;
+            --barva-textu: #e8e8e8;
+            --barva-hrace: #1e3a8a;
+            --barva-hrace-svetla: #3b82f6;
+            --barva-kgb: #7f1d1d;
+            --barva-kgb-svetla: #ef4444;
+            --barva-zdroju: #fbbf24;
+            --barva-uspech: #10b981;
+            --barva-chyba: #ef4444;
+            --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Roboto Condensed', sans-serif;
-            background-color: var(--barva-pozadi);
+            background: var(--gradient-bg);
             color: var(--barva-textu);
             margin: 0;
             padding: 20px;
@@ -29,15 +36,42 @@
             align-items: center;
             flex-direction: column;
             min-height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23330000' fill-opacity='0.4'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-48 0c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7z'/%3E%3C/g%3E%3C/svg%3E");
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         #herni-plocha {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             height: 90vh;
-            border: 5px solid var(--barva-ramu);
-            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--barva-ramu);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             display: grid;
             grid-template-rows: auto 1fr 1fr auto;
             grid-template-areas: 
@@ -45,122 +79,190 @@
                 "kgb"
                 "hrac"
                 "log";
-            gap: 10px;
-            padding: 10px;
-            box-shadow: 0 0 20px black;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(204, 17, 0, 0.3);
             position: relative;
+            overflow: hidden;
         }
 
-        /* Info panel */
+        #herni-plocha::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Info panel improvements */
         #info-panel {
             grid-area: info;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background: var(--barva-kgb);
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--barva-kgb), #991b1b);
             border: 2px solid var(--barva-kgb-svetla);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         #ukazatel-hrozby {
             width: 70%;
-            height: 30px;
-            background: #333;
-            border: 1px solid var(--barva-kgb-svetla);
+            height: 40px;
+            background: linear-gradient(90deg, #1f2937, #374151);
+            border: 2px solid var(--barva-kgb-svetla);
+            border-radius: 20px;
             position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         #bar-hrozby {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #ffcc00, var(--barva-ramu));
-            transition: width 0.5s ease-in-out;
+            background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bar-hrozby::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         #text-hrozby {
             position: absolute;
             width: 100%;
             text-align: center;
-            line-height: 30px;
+            line-height: 40px;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
             color: white;
-            text-shadow: 1px 1px 2px black;
+            text-shadow: 2px 2px 4px black;
+            font-size: 0.9em;
         }
         
         #tlacitko-kola {
-            padding: 10px 20px;
-            font-size: 1em;
+            padding: 12px 24px;
+            font-size: 1.1em;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
             cursor: pointer;
             border: 2px solid var(--barva-hrace-svetla);
-            background-color: var(--barva-hrace);
+            background: linear-gradient(135deg, var(--barva-hrace), #1e40af);
             color: white;
-            transition: background-color 0.3s;
-        }
-        #tlacitko-kola:hover {
-            background-color: var(--barva-hrace-svetla);
-        }
-        #tlacitko-kola:disabled {
-            background-color: #555;
-            border-color: #777;
-            cursor: not-allowed;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Herní zóny */
+        #tlacitko-kola:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        #tlacitko-kola:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        #tlacitko-kola:disabled {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            border-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Game zones */
         #zona-kgb, #zona-hrace {
-            padding: 10px;
+            padding: 20px;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            border-radius: 5px;
-            min-height: 180px;
+            gap: 15px;
+            border-radius: 12px;
+            min-height: 200px;
+            position: relative;
+            overflow: hidden;
         }
 
         #zona-kgb {
             grid-area: kgb;
-            background: rgba(94, 0, 0, 0.3);
-            border-top: 2px dashed var(--barva-kgb-svetla);
-            border-bottom: 2px dashed var(--barva-kgb-svetla);
+            background: linear-gradient(135deg, rgba(127, 29, 29, 0.3), rgba(153, 27, 27, 0.2));
+            border: 2px dashed var(--barva-kgb-svetla);
+            box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1);
         }
 
         #zona-hrace {
             grid-area: hrac;
-            background: rgba(0, 77, 153, 0.2);
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(37, 99, 235, 0.2));
+            border: 2px solid var(--barva-hrace-svetla);
+            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1);
         }
         
         #aktivni-hrozby, #ruka-hrace {
             flex-grow: 1;
             height: 100%;
             display: flex;
-            gap: 10px;
-            padding: 5px;
-            background: rgba(0,0,0,0.3);
+            gap: 12px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
             min-width: 0;
             flex-wrap: wrap; 
             align-content: flex-start;
             overflow-y: auto;
+            backdrop-filter: blur(5px);
         }
         
-        #aktivni-hrozby { border: 1px solid var(--barva-kgb); }
-        #ruka-hrace { border: 1px solid var(--barva-hrace); }
+        #aktivni-hrozby { 
+            border: 1px solid var(--barva-kgb);
+            box-shadow: inset 0 2px 10px rgba(127, 29, 29, 0.3);
+        }
+        
+        #ruka-hrace { 
+            border: 1px solid var(--barva-hrace);
+            box-shadow: inset 0 2px 10px rgba(30, 58, 138, 0.3);
+        }
 
         .balicek-info {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             color: var(--barva-textu);
-            padding: 10px 0;
+            padding: 15px 0;
             height: 100%;
             text-align: center;
         }
         
         .balicek {
-            width: 110px;
-            height: 150px;
-            border: 2px solid;
-            border-radius: 10px;
+            width: 120px;
+            height: 160px;
+            border: 3px solid;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -170,68 +272,720 @@
             user-select: none;
             position: relative;
             flex-shrink: 0;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+            backdrop-filter: blur(10px);
         }
 
-        #balicek-kgb { border-color: var(--barva-kgb-svetla); background: var(--barva-kgb); }
-        #balicek-hrace { border-color: var(--barva-hrace-svetla); background: var(--barva-hrace); }
+        .balicek:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #balicek-kgb { 
+            border-color: var(--barva-kgb-svetla);
+            background: linear-gradient(145deg, var(--barva-kgb), #991b1b);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        #balicek-hrace { 
+            border-color: var(--barva-hrace-svetla);
+            background: linear-gradient(145deg, var(--barva-hrace), #1e40af);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
         
-        .pocet-karet { position: absolute; bottom: 5px; right: 10px; font-size: 1.2em; text-shadow: 2px 2px 3px black; }
+        .pocet-karet { 
+            position: absolute; 
+            bottom: 8px; 
+            right: 12px; 
+            font-size: 1.4em; 
+            text-shadow: 2px 2px 4px black;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+        }
 
-        #zdroje-hrace { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; flex-shrink: 0; padding-left: 10px; }
-        #cislo-zdroju { font-size: 2.5em; font-weight: bold; color: var(--barva-zdroju); text-shadow: 0 0 5px black; }
-
-        /* Karty */
-        .karta {
-            min-width: 140px;
-            width: 140px;
-            height: 170px;
+        #zdroje-hrace { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            flex-shrink: 0; 
+            padding-left: 15px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1));
             border-radius: 10px;
-            padding: 30px 10px 10px 10px; 
+            padding: 20px;
+            border: 2px solid var(--barva-zdroju);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        #cislo-zdroju { 
+            font-size: 3em; 
+            font-weight: 900; 
+            color: var(--barva-zdroju); 
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Enhanced cards */
+        .karta {
+            min-width: 150px;
+            width: 150px;
+            height: 180px;
+            border-radius: 12px;
+            padding: 12px 8px 8px 8px; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            backdrop-filter: blur(5px);
         }
-        .karta::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; pointer-events: none; }
-        .karta-hrace { border: 2px solid var(--barva-hrace-svetla); background: linear-gradient(145deg, var(--barva-hrace), #002d5b); cursor: pointer; }
-        .karta-hrace:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 10px 15px rgba(0, 123, 255, 0.4); }
-        .karta-hrace.nehratelna { filter: grayscale(80%) brightness(0.7); cursor: not-allowed; }
-        .karta-hrace.nehratelna:hover { transform: none; box-shadow: 3px 3px 5px rgba(0,0,0,0.5); }
-        .karta-kgb { border: 2px solid var(--barva-kgb-svetla); background: linear-gradient(145deg, var(--barva-kgb), #3b0000); cursor: help; }
 
-        .karta-nazev { font-weight: bold; font-size: 1em; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 5px; margin-bottom: 5px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
-        .karta-popis { flex-grow: 1; font-size: 0.85em; line-height: 1.3; }
-        .karta-cena { position: absolute; top: 5px; left: 5px; width: 30px; height: 30px; background-color: var(--barva-zdroju); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; border: 2px solid black; }
-        .karta-typ { font-style: italic; text-align: center; font-size: 0.8em; opacity: 0.8; margin-top: 5px; }
+        .karta::before { 
+            content: ''; 
+            position: absolute; 
+            top: 3px; 
+            left: 3px; 
+            right: 3px; 
+            bottom: 3px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border-radius: 8px; 
+            pointer-events: none; 
+        }
+
+        .karta-hrace { 
+            border: 3px solid var(--barva-hrace-svetla); 
+            background: linear-gradient(145deg, var(--barva-hrace), #1e40af); 
+            cursor: pointer;
+        }
+
+        .karta-hrace:hover:not(.nehratelna) { 
+            transform: translateY(-10px) scale(1.05); 
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
+            z-index: 10;
+        }
+
+        .karta-hrace.nehratelna { 
+            filter: grayscale(80%) brightness(0.6); 
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .karta-hrace.nehratelna:hover { 
+            transform: none; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+        }
+
+        .karta-kgb { 
+            border: 3px solid var(--barva-kgb-svetla); 
+            background: linear-gradient(145deg, var(--barva-kgb), #991b1b); 
+            cursor: help;
+        }
+
+        .karta-kgb:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .karta-nazev { 
+            font-weight: bold; 
+            font-size: 0.9em; 
+            text-align: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+            padding-bottom: 6px; 
+            margin-bottom: 6px; 
+            min-height: 30px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            line-height: 1.2;
+        }
+
+        .karta-popis { 
+            flex-grow: 1; 
+            font-size: 0.8em; 
+            line-height: 1.3; 
+            text-align: center;
+        }
+
+        .karta-cena { 
+            position: absolute; 
+            top: 6px; 
+            left: 6px; 
+            width: 28px; 
+            height: 28px; 
+            background: linear-gradient(135deg, var(--barva-zdroju), #f59e0b); 
+            color: black; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 900; 
+            font-size: 1.1em; 
+            border: 2px solid black;
+            font-family: 'Orbitron', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .karta-typ { 
+            font-style: italic; 
+            text-align: center; 
+            font-size: 0.75em; 
+            opacity: 0.9; 
+            margin-top: 6px;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
         
-        #zona-kgb.cili { outline: 3px solid yellow; box-shadow: 0 0 15px yellow; }
+        #zona-kgb.cili { 
+            outline: 3px solid #fbbf24; 
+            box-shadow: 0 0 30px #fbbf24, inset 0 0 20px rgba(251, 191, 36, 0.2);
+            animation: pulse-target 1s infinite;
+        }
 
-        /* Log */
-        #log-panel { grid-area: log; height: 80px; background: rgba(0,0,0,0.5); border-top: 1px solid #444; padding: 5px; overflow-y: auto; font-size: 0.9em; }
-        .log-zprava { padding: 2px 5px; }
-        .log-zprava.hrac { color: var(--barva-hrace-svetla); }
-        .log-zprava.kgb { color: var(--barva-kgb-svetla); }
-        .log-zprava.system { color: #cccccc; font-style: italic; }
+        @keyframes pulse-target {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
 
-        /* Modální okno */
-        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        #modal-content { background: var(--barva-pozadi); padding: 30px; border: 5px solid var(--barva-ramu); text-align: center; max-width: 600px; }
-        #modal-title { font-size: 3em; margin-bottom: 20px; }
-        #modal-text { font-size: 1.2em; margin-bottom: 20px; }
-        #modal-button { padding: 15px 30px; font-size: 1.2em; cursor: pointer; background: var(--barva-hrace); color: white; border: 2px solid var(--barva-hrace-svetla); }
-        #modal-title.vyhra { color: var(--barva-hrace-svetla); }
-        #modal-title.prohra { color: var(--barva-kgb-svetla); }
-        #nastaveni-nove-hry { margin-top: 20px; padding: 10px; border-top: 1px solid #444; }
-        #nastaveni-nove-hry label { margin-right: 10px; }
-        #pocet-karet-input { width: 60px; padding: 5px; background: #333; color: white; border: 1px solid #777; }
+        /* Enhanced log */
+        #log-panel { 
+            grid-area: log; 
+            height: 100px; 
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(31, 41, 55, 0.6)); 
+            border: 1px solid #4b5563; 
+            border-radius: 10px;
+            padding: 12px; 
+            overflow-y: auto; 
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
 
+        .log-zprava { 
+            padding: 4px 8px; 
+            margin: 2px 0;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            animation: slideInLog 0.5s ease-out;
+        }
+
+        @keyframes slideInLog {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .log-zprava.hrac { 
+            color: var(--barva-hrace-svetla);
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--barva-hrace-svetla);
+        }
+
+        .log-zprava.kgb { 
+            color: var(--barva-kgb-svetla);
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid var(--barva-kgb-svetla);
+        }
+
+        .log-zprava.system { 
+            color: #d1d5db; 
+            font-style: italic;
+            background: rgba(156, 163, 175, 0.1);
+            border-left: 3px solid #9ca3af;
+        }
+
+        /* Enhanced modals */
+        #modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.9); 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        #modal-content { 
+            background: linear-gradient(135deg, var(--barva-pozadi), #1e1b4b); 
+            padding: 40px; 
+            border: 3px solid var(--barva-ramu); 
+            border-radius: 15px;
+            text-align: center; 
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: modalSlideIn 0.5s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        #modal-title { 
+            font-family: 'Orbitron', monospace;
+            font-size: 3em; 
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px currentColor;
+            font-weight: 900;
+        }
+
+        #modal-text { 
+            font-size: 1.3em; 
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        #modal-button { 
+            padding: 15px 30px; 
+            font-size: 1.2em; 
+            cursor: pointer; 
+            background: linear-gradient(135deg, var(--barva-hrace), #1e40af); 
+            color: white; 
+            border: 2px solid var(--barva-hrace-svetla);
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        #modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        #modal-title.vyhra { 
+            color: var(--barva-uspech);
+            animation: victory-glow 2s infinite alternate;
+        }
+
+        #modal-title.prohra { 
+            color: var(--barva-chyba);
+            animation: defeat-pulse 1s infinite;
+        }
+
+        @keyframes victory-glow {
+            from { text-shadow: 0 0 20px currentColor; }
+            to { text-shadow: 0 0 40px currentColor, 0 0 60px currentColor; }
+        }
+
+        @keyframes defeat-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #nastaveni-nove-hry { 
+            margin-top: 25px; 
+            padding: 20px; 
+            border-top: 1px solid #4b5563;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        #nastaveni-nove-hry label { 
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        #pocet-karet-input { 
+            width: 70px; 
+            padding: 8px; 
+            background: #374151; 
+            color: white; 
+            border: 2px solid #6b7280;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+        }
+
+        /* Tutorial Modal */
+        #tutorial-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        #tutorial-content {
+            background: linear-gradient(135deg, var(--barva-pozadi), #1e1b4b);
+            padding: 40px;
+            border: 3px solid var(--barva-hrace-svetla);
+            border-radius: 15px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: modalSlideIn 0.5s ease-out;
+        }
+
+        #tutorial-content h2 {
+            font-family: 'Orbitron', monospace;
+            color: var(--barva-hrace-svetla);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .tutorial-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid var(--barva-hrace-svetla);
+        }
+
+        .tutorial-section h3 {
+            color: var(--barva-zdroju);
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        #tutorial-close {
+            background: linear-gradient(135deg, var(--barva-hrace), #1e40af);
+            color: white;
+            border: 2px solid var(--barva-hrace-svetla);
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+        }
+
+        #tutorial-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Card tooltip */
+        .card-tooltip {
+            position: absolute;
+            background: linear-gradient(135deg, #1f2937, #374151);
+            border: 2px solid var(--barva-hrace-svetla);
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            font-size: 0.9em;
+            line-height: 1.4;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-tooltip h4 {
+            margin: 0 0 10px 0;
+            color: var(--barva-hrace-svetla);
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Animation effects */
+        .card-play-animation {
+            animation: cardPlay 0.8s ease-out forwards;
+        }
+
+        @keyframes cardPlay {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(0) rotate(15deg); opacity: 0; }
+        }
+
+        /* Enemy card reveal */
+        #enemy-card-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1500;
+            backdrop-filter: blur(5px);
+            animation: overlayFadeIn 0.3s ease-out;
+        }
+
+        @keyframes overlayFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .enemy-card-display {
+            width: 200px;
+            height: 260px;
+            border: 4px solid var(--barva-kgb-svetla);
+            border-radius: 15px;
+            background: linear-gradient(145deg, var(--barva-kgb), #991b1b);
+            padding: 15px 12px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.6);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: cardSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center;
+        }
+
+        @keyframes cardSlideIn {
+            0% { 
+                transform: translateY(-100vh) scale(0.5) rotate(-15deg); 
+                opacity: 0; 
+            }
+            60% { 
+                transform: translateY(0) scale(1.1) rotate(2deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(0) scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+        }
+
+        .enemy-card-display::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .enemy-card-display:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 70px rgba(239, 68, 68, 0.8);
+        }
+
+        .enemy-card-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .enemy-card-description {
+            flex-grow: 1;
+            font-size: 0.95em;
+            line-height: 1.4;
+            text-align: center;
+            color: #f3f4f6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .enemy-card-type {
+            font-style: italic;
+            text-align: center;
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 8px;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #fbbf24;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .click-hint {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f3f4f6;
+            font-size: 1em;
+            text-align: center;
+            animation: pulseHint 2s infinite;
+            font-family: 'Orbitron', monospace;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 1600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes pulseHint {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.9; transform: translateX(-50%) scale(1.05); }
+        }
+
+        .threat-increase {
+            animation: threatPulse 0.8s ease-out;
+        }
+
+        @keyframes threatPulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            30% { transform: scale(1.05); filter: brightness(1.4) saturate(1.5); }
+            60% { transform: scale(1.02); filter: brightness(1.2) saturate(1.2); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
+        .energy-change {
+            animation: energyGlow 0.8s ease-out;
+        }
+
+        @keyframes energyGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.5) drop-shadow(0 0 20px currentColor); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            #herni-plocha {
+                max-width: 100%;
+                height: 95vh;
+            }
+            
+            .karta {
+                min-width: 130px;
+                width: 130px;
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            #herni-plocha {
+                height: 100vh;
+                padding: 15px;
+            }
+            
+            #zona-kgb, #zona-hrace {
+                flex-direction: column;
+                min-height: 150px;
+            }
+            
+            .karta {
+                min-width: 120px;
+                width: 120px;
+                height: 150px;
+                font-size: 0.8em;
+            }
+            
+            #modal-content, #tutorial-content {
+                margin: 20px;
+                padding: 30px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: loading-sweep 1.5s infinite;
+        }
+
+        @keyframes loading-sweep {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
     </style>
 </head>
 <body>
+    <!-- Background particles -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorial-modal">
+        <div id="tutorial-content">
+            <h2>🇨🇿 Srdce Evropy: Poslední Bašta Svobody</h2>
+            
+            <div class="tutorial-section">
+                <h3>📋 Cíl hry</h3>
+                <p>Chraňte Českou republiku před ruskou hrozbou! Snižte hrozbu na 0% a vyhrajte. Pokud hrozba dosáhne 100%, republika padne.</p>
+            </div>
+
+            <div class="tutorial-section">
+                <h3>⚡ Občanská energie</h3>
+                <p>Vaše základní měna pro hraní karet. Každé kolo získáváte energii podle svého maxima. Některé karty energii zvyšují, jiné ji vyžadují k zahrání.</p>
+            </div>
+
+            <div class="tutorial-section">
+                <h3>🎯 Jak hrát</h3>
+                <p>• Klikněte na kartu v ruce pro zahrání<br>
+                • Šedé karty nelze zahrát (nedostatek energie nebo cílů)<br>
+                • Některé karty vyžadují výběr cíle na ploše KGB<br>
+                • Ukončete kolo tlačítkem "Ukončit kolo"</p>
+            </div>
+
+            <div class="tutorial-section">
+                <h3>🚨 KGB/GRU hrozby</h3>
+                <p>• <strong>Útoky:</strong> Okamžitě zvyšují hrozbu<br>
+                • <strong>Agenti/Vlivy:</strong> Zůstávají na ploše a mají trvalé efekty<br>
+                • <strong>Katastrofy:</strong> Devastující efekty při vysoké hrozbě</p>
+            </div>
+
+            <div class="tutorial-section">
+                <h3>💡 Tipy</h3>
+                <p>• Najděte si na karty pro detailní informace<br>
+                • Sledujte trvalé efekty aktivních hrozeb<br>
+                • Plánujte tah dopředu - energie je omezená<br>
+                • Prioritizujte ničení agentů a vlivů</p>
+            </div>
+
+            <button id="tutorial-close">Začít hru</button>
+        </div>
+    </div>
 
     <div id="herni-plocha">
         <div id="info-panel">
@@ -241,30 +995,49 @@
             </div>
             <button id="tlacitko-kola" onclick="ukoncitKolo()">Ukončit kolo</button>
         </div>
+        
         <div id="zona-kgb">
             <div class="balicek-info">
                 <div id="balicek-kgb" class="balicek">
-                    <div>BALÍČEK KGB/GRU</div>
+                    <div>BALÍČEK<br>KGB/GRU</div>
                     <div class="pocet-karet" id="pocet-kgb"></div>
                 </div>
-                <span>Aktivní hrozby:</span>
+                <span style="font-weight: bold; color: var(--barva-kgb-svetla);">Aktivní hrozby:</span>
             </div>
             <div id="aktivni-hrozby"></div>
         </div>
+        
         <div id="zona-hrace">
             <div class="balicek-info">
                  <div id="balicek-hrace" class="balicek" title="Váš balíček odhodlání">
-                    <div>PRAVÝ BLOK</div>
+                    <div>PRAVÝ<br>BLOK</div>
                     <div class="pocet-karet" id="pocet-hrac"></div>
                 </div>
             </div>
             <div id="ruka-hrace"></div>
             <div id="zdroje-hrace">
                 <div id="cislo-zdroju">3/3</div>
-                <span>OBČANSKÁ ENERGIE</span>
+                <span style="font-weight: bold;">OBČANSKÁ<br>ENERGIE</span>
             </div>
         </div>
+        
         <div id="log-panel"></div>
+    </div>
+
+    <!-- Enemy card reveal overlay -->
+    <div id="enemy-card-overlay">
+        <div class="enemy-card-display" id="enemy-card-display">
+            <div class="enemy-card-title" id="enemy-card-title"></div>
+            <div class="enemy-card-description" id="enemy-card-description"></div>
+            <div class="enemy-card-type" id="enemy-card-type"></div>
+        </div>
+        <div class="click-hint">🖱️ Klikněte pro pokračování</div>
+    </div>
+
+    <!-- Card tooltip -->
+    <div class="card-tooltip" id="card-tooltip">
+        <h4 id="tooltip-title"></h4>
+        <div id="tooltip-content"></div>
     </div>
 
     <div id="modal-overlay">
@@ -279,52 +1052,125 @@
         </div>
     </div>
 
-
     <script>
         const databazeKaret = {
             hrac: [
-                { id: "h01", nazev: "Volební lístek Pravého Bloku", cena: 5, typ: "Akce", popis: "Sniž HROZBU o 20 bodů. Vlast je dočasně v bezpečí.", onPlay: (stav) => { zmenHrozbu(-20); log("hrac", "Vítězství ve volbách dočasně odvrátilo katastrofu! Hrozba klesá o 20."); }},
-                { id: "h02", nazev: "Siderické kyvadlo", cena: 2, typ: "Akce", popis: "Podívej se na 3 vrchní karty z balíčku KGB. Jednu z nich odstraň ze hry.", onPlay: (stav) => { odhalKyvadlem(); log("hrac", "Siderické kyvadlo odhaluje a ničí plány KGB!"); }},
-                { id: "h03", nazev: "Odhalení agenta", cena: 3, typ: "Akce", popis: "Znič jednu aktivní kartu typu 'Agent' nebo 'Vlastizrádce'. Sniž HROZBU o 5.", cileTyp: ['Agent', 'Vlastizrádce'], onPlay: (stav) => { cilitHrozbu('typ', ['Agent', 'Vlastizrádce'], () => zmenHrozbu(-5)); log("hrac", "Statečný čin odhalil a zneškodnil nepřátelského agenta!"); }},
-                { id: "h04", nazev: "Šíření pravdy (cibulka.net)", cena: 2, typ: "Trvalá podpora", popis: "Na začátku tvého kola snižuje HROZBU o 1 bod.", onPlay: (stav) => { log("hrac", "Web cibulka.net šíří pravdu a posiluje odhodlání národa!"); }},
-                { id: "h05", nazev: "Občanská vševědoucnost", cena: 3, typ: "Akce", popis: "Vezmi si 2 karty. Pokud je tvůj balíček prázdný, získej 2 karty 'Prozření'.", onPlay: (stav) => { 
+                { id: "h01", nazev: "Volební lístek Pravého Bloku", cena: 5, typ: "Akce", popis: "Sniž HROZBU o 20 bodů. Vlast je dočasně v bezpečí.", detaily: "Demokratické volby jsou nejsilnější zbraní proti autoritářství. Vítězství ve volbách poskytuje legitimitu a sílu k obraně svobody.", onPlay: (stav) => { zmenHrozbu(-20); log("hrac", "Vítězství ve volbách dočasně odvrátilo katastrofu! Hrozba klesá o 20."); }},
+                { id: "h02", nazev: "Siderické kyvadlo", cena: 2, typ: "Akce", popis: "Podívej se na 3 vrchní karty z balíčku KGB. Jednu z nich odstraň ze hry.", detaily: "Mystické síly odhalují budoucí plány nepřítele. Znalost toho, co chystá protivník, je neocenitelná výhoda.", onPlay: (stav) => { odhalKyvadlem(); log("hrac", "Siderické kyvadlo odhaluje a ničí plány KGB!"); }},
+                { id: "h03", nazev: "Odhalení agenta", cena: 3, typ: "Akce", popis: "Znič jednu aktivní kartu typu 'Agent' nebo 'Vlastizrádce'. Sniž HROZBU o 5.", detaily: "Kontrarozvědná práce odhalí a zneškodní nepřátelské agenty infiltrované do státních struktur.", cileTyp: ['Agent', 'Vlastizrádce'], onPlay: (stav) => { cilitHrozbu('typ', ['Agent', 'Vlastizrádce'], () => zmenHrozbu(-5)); log("hrac", "Statečný čin odhalil a zneškodnil nepřátelského agenta!"); }},
+                { id: "h04", nazev: "Šíření pravdy (cibulka.net)", cena: 2, typ: "Trvalá podpora", popis: "Na začátku tvého kola snižuje HROZBU o 1 bod.", detaily: "Nezávislé médium šíří pravdu a probouzí vědomí občanů. Pravda je mocnou zbraní proti dezinformacím.", onPlay: (stav) => { log("hrac", "Web cibulka.net šíří pravdu a posiluje odhodlání národa!"); }},
+                { id: "h05", nazev: "Občanská vševědoucnost", cena: 3, typ: "Akce", popis: "Vezmi si 2 karty. Pokud je tvůj balíček prázdný, získej 2 karty 'Prozření'.", detaily: "Informovaní občané jsou pilířem demokracie. Znalosti a vědomosti posilují odolnost společnosti.", onPlay: (stav) => { 
                     if (stav.balicekHrac.length >= 2) { vzitKartu(); vzitKartu(); log("hrac", "Informovaní občané jsou silní! Dobíráš 2 karty."); } 
                     else if (stav.balicekHrac.length === 1) { vzitKartu(); pridejKartuDoRuky("h08"); log("hrac", "Zbytky odhodlání a nové prozření posilují tvou ruku!"); }
                     else { pridejKartuDoRuky("h08"); pridejKartuDoRuky("h08"); log("hrac", "I bez naděje nacházíš prozření! Získáváš 2 karty."); }
                 }},
-                { id: "h06", nazev: "Lustrační zákon II.", cena: 7, typ: "Akce", popis: "Odstraň VŠECHNY aktivní karty typu 'Agent' a 'Vlastizrádce'. Sniž HROZBU o 10.", onPlay: (stav) => { znicVsechnyTypy(['Agent', 'Vlastizrádce']); zmenHrozbu(-10); log("hrac", "Lustrace 2.0 čistí státní správu od zrádců! Hrozba klesá o 10."); }},
-                { id: "h07", nazev: "Média ve svobodných rukou", cena: 4, typ: "Trvalá podpora", popis: "Karty KGB typu 'Dezinformace' mají o 3 body menší efekt.", onPlay: (stav) => { log("hrac", "Svobodná média brání národ před lživou propagandou Kremlu!"); }},
-                { id: "h08", nazev: "Prozření", cena: 1, typ: "Akce", popis: "Sniž HROZBU o 3.", onPlay: (stav) => { zmenHrozbu(-3); log("hrac", "Lidé prohlédli... Hrozba mírně klesá."); }},
-                { id: "h09", nazev: "Občanská bdělost", cena: 2, typ: "Akce", popis: "Zvyš svou maximální Občanskou energii o 1.", onPlay: (stav) => { stav.maxZdroju++; log("hrac", "Bdělost občanů posiluje akceschopnost státu."); }},
-                { id: "h10", nazev: "Spravedlivý soud", cena: 4, typ: "Akce", popis: "Znič jednu aktivní kartu Hrozby dle výběru.", cileTyp: [], onPlay: (stav) => { cilitHrozbu('typ', [], () => {}); log("hrac", "Spravedlnost dopadla na nástroje Kremlu!"); }},
-                { id: "h11", nazev: "Očista justice", cena: 4, typ: "Akce", popis: "Znič jednu aktivní hrozbu s tagem 'Justice'. Sniž HROZBU o 3.", cileTag: ['Justice'], onPlay: (stav) => { cilitHrozbu('tag', ['Justice'], () => zmenHrozbu(-3)); log("hrac", "Očista justice obnovuje důvěru v právo!"); }},
-                { id: "h12", nazev: "Energetická soběstačnost", cena: 5, typ: "Akce", popis: "Znič jednu aktivní hrozbu s tagem 'Energie'. Získej 2 Energie.", cileTag: ['Energie'], onPlay: (stav) => { cilitHrozbu('tag', ['Energie'], () => { stav.zdroje += 2; log("hrac", "Vymanění se ze závislosti nám dává novou sílu!"); }); }},
+                { id: "h06", nazev: "Lustrační zákon II.", cena: 7, typ: "Akce", popis: "Odstraň VŠECHNY aktivní karty typu 'Agent' a 'Vlastizrádce'. Sniž HROZBU o 10.", detaily: "Radikální čistka státní správy od všech kolaborantů a agentů. Drakonické opatření pro záchranu státu.", onPlay: (stav) => { znicVsechnyTypy(['Agent', 'Vlastizrádce']); zmenHrozbu(-10); log("hrac", "Lustrace 2.0 čistí státní správu od zrádců! Hrozba klesá o 10."); }},
+                { id: "h07", nazev: "Média ve svobodných rukou", cena: 4, typ: "Trvalá podpora", popis: "Karty KGB typu 'Dezinformace' mají o 3 body menší efekt.", detaily: "Nezávislé a svobodné médium je zárukou demokracie. Brání šíření lží a manipulací.", onPlay: (stav) => { log("hrac", "Svobodná média brání národ před lživou propagandou Kremlu!"); }},
+                { id: "h08", nazev: "Prozření", cena: 1, typ: "Akce", popis: "Sniž HROZBU o 3.", detaily: "Občané prohlédli skrze lži a manipulace. I malé prozření má svou sílu.", onPlay: (stav) => { zmenHrozbu(-3); log("hrac", "Lidé prohlédli... Hrozba mírně klesá."); }},
+                { id: "h09", nazev: "Občanská bdělost", cena: 2, typ: "Akce", popis: "Zvyš svou maximální Občanskou energii o 1.", detaily: "Aktivní občané zvyšují akceschopnost celého státu. Každý probudivší se občan je přínosem.", onPlay: (stav) => { stav.maxZdroju++; log("hrac", "Bdělost občanů posiluje akceschopnost státu."); }},
+                { id: "h10", nazev: "Spravedlivý soud", cena: 4, typ: "Akce", popis: "Znič jednu aktivní kartu Hrozby dle výběru.", detaily: "Nezávislá justice je základem právního státu. Spravedlivý soud dokáže potrestat i ty nejmocnější.", cileTyp: [], onPlay: (stav) => { cilitHrozbu('typ', [], () => {}); log("hrac", "Spravedlnost dopadla na nástroje Kremlu!"); }},
+                { id: "h11", nazev: "Očista justice", cena: 4, typ: "Akce", popis: "Znič jednu aktivní hrozbu s tagem 'Justice'. Sniž HROZBU o 3.", detaily: "Vyčištění justičního systému od korupce a vlivu cizích mocností.", cileTag: ['Justice'], onPlay: (stav) => { cilitHrozbu('tag', ['Justice'], () => zmenHrozbu(-3)); log("hrac", "Očista justice obnovuje důvěru v právo!"); }},
+                { id: "h12", nazev: "Energetická soběstačnost", cena: 5, typ: "Akce", popis: "Znič jednu aktivní hrozbu s tagem 'Energie'. Získej 2 Energie.", detaily: "Nezávislost na dodávkách energie od nepřátelských režimů je klíčová pro svobodu.", cileTag: ['Energie'], onPlay: (stav) => { cilitHrozbu('tag', ['Energie'], () => { stav.zdroje += 2; log("hrac", "Vymanění se ze závislosti nám dává novou sílu!"); }); }},
             ],
             kgb: [
-                { id: "k01", typ: "Útok", popis: "Zvyš HROZBU o 10. Přinuť hráče odhodit jednu náhodnou kartu.", onPlay: (stav) => { zmenHrozbu(10); odhoditNahodnouKartu(); log("kgb", "Ruské drogy zaplavují zemi a ničí morálku! Hrozba +10."); }},
-                { id: "k02", typ: "Dezinformace", popis: "Zvyš HROZBU o 5.", onPlay: (stav) => { let hodnota = maHracPodporu("Média ve svobodných rukou") ? 2 : 5; zmenHrozbu(hodnota); log("kgb", `Kremelská média šíří lži! Hrozba +${hodnota}.`); }},
-                { id: "k03", typ: "Agent", popis: "TRVALÝ EFEKT: Na začátku kola KGB zvyšuje HROZBU o 2.", onPlay: (stav) => { log("kgb", "Agent Moskvy v parlamentu sabotuje naši demokracii!"); }},
-                { id: "k04", typ: "Agent", popis: "TRVALÝ EFEKT: Na začátku kola KGB zvyšuje HROZBU o 3. Všechny karty hráče stojí o 1 Energii více.", onPlay: (stav) => { log("kgb", "Nejvyšší úřad obsadil agent GRU! Vše je těžší a dražší!"); }},
-                { id: "k05", typ: "Útok", popis: "Zvyš HROZBU o 7. Znič hráči 2 body Občanské energie pro příští kolo.", onPlay: (stav) => { zmenHrozbu(7); stav.postihZdroju = 2; log("kgb", "Státní majetek je tunelován do Ruska! Hrozba +7, energie ochromena."); }},
-                { id: "k06", typ: "Katastrofa", popis: "Zvyš HROZBU o 25. Lze zahrát, jen pokud je HROZBA > 50.", onPlay: (stav) => { if (stav.hrozba > 50) { zmenHrozbu(25); log("kgb", "SATANSKÉ SÍLY ŘÍŠE ZLA ROZBÍJEJÍ NÁŠ STÁT! HROZBA +25!"); } else { log("kgb", "Kreml se pokusil rozbít stát, ale národ je stále příliš silný."); zmenHrozbu(5); }}},
-                { id: "k07", typ: "Vliv", tag: 'Energie', popis: "TRVALÝ EFEKT: Hráč získává na začátku kola o 1 Občanskou energii méně.", onPlay: (stav) => { log("kgb", "Závislost na ruském plynu a ropě nás dusí!"); }},
-                { id: "k08", typ: "Vliv", tag: 'Justice', popis: "TRVALÝ EFEKT: Zvyšuje cenu karty 'Spravedlivý soud' o 2.", onPlay: (stav) => { zmenHrozbu(4); log("kgb", "Justice je prolezlá agenty. Právo je slepé k ruským zločinům!"); }},
-                { id: "k09", typ: "Dezinformace", popis: "Zvyš HROZBU o 6.", onPlay: (stav) => { let hodnota = maHracPodporu("Média ve svobodných rukou") ? 3 : 6; zmenHrozbu(hodnota); log("kgb", `Ruská propaganda přepisuje dějiny! Hrozba +${hodnota}.`); }},
-                { id: "k10", typ: "Útok", popis: "Zvyš HROZBU o 5. Podívej se na karty v ruce hráče.", onPlay: (stav) => { zmenHrozbu(5); log("kgb", "Hackeři z GRU útočí na naši infrastrukturu a kradou data! Hrozba +5."); }},
+                { id: "k01", typ: "Útok", popis: "Zvyš HROZBU o 10. Přinuť hráče odhodit jednu náhodnou kartu.", detaily: "Ruské drogy zaplavují zemi a demoralizují občany. Narkomafie ničí morálku společnosti.", onPlay: (stav) => { zmenHrozbu(10); odhoditNahodnouKartu(); log("kgb", "Ruské drogy zaplavují zemi a ničí morálku! Hrozba +10."); }},
+                { id: "k02", typ: "Dezinformace", popis: "Zvyš HROZBU o 5.", detaily: "Systematické šíření lží a polopravd prostřednictvím médií a sociálních sítí.", onPlay: (stav) => { let hodnota = maHracPodporu("Média ve svobodných rukou") ? 2 : 5; zmenHrozbu(hodnota); log("kgb", `Kremelská média šíří lži! Hrozba +${hodnota}.`); }},
+                { id: "k03", typ: "Agent", popis: "TRVALÝ EFEKT: Na začátku kola KGB zvyšuje HROZBU o 2.", detaily: "Infiltrovaný agent v parlamentu sabotuje demokratické procesy zevnitř.", onPlay: (stav) => { log("kgb", "Agent Moskvy v parlamentu sabotuje naši demokracii!"); }},
+                { id: "k04", typ: "Agent", popis: "TRVALÝ EFEKT: Na začátku kola KGB zvyšuje HROZBU o 3. Všechny karty hráče stojí o 1 Energii více.", detaily: "Nejvyšší představitel státu je pod kontrolou GRU. Všechny akce jsou ztížené a dražší.", onPlay: (stav) => { log("kgb", "Nejvyšší úřad obsadil agent GRU! Vše je těžší a dražší!"); }},
+                { id: "k05", typ: "Útok", popis: "Zvyš HROZBU o 7. Znič hráči 2 body Občanské energie pro příští kolo.", detaily: "Systematické rozkrádání státního majetku snižuje kapacitu státu jednat.", onPlay: (stav) => { zmenHrozbu(7); stav.postihZdroju = 2; log("kgb", "Státní majetek je tunelován do Ruska! Hrozba +7, energie ochromena."); }},
+                { id: "k06", typ: "Katastrofa", popis: "Zvyš HROZBU o 25. Lze zahrát, jen pokud je HROZBA > 50.", detaily: "Finální útok na základy státnosti. Rozbití všech demokratických institucí.", onPlay: (stav) => { if (stav.hrozba > 50) { zmenHrozbu(25); log("kgb", "SATANSKÉ SÍLY ŘÍŠE ZLA ROZBÍJEJÍ NÁŠ STÁT! HROZBA +25!"); } else { log("kgb", "Kreml se pokusil rozbít stát, ale národ je stále příliš silný."); zmenHrozbu(5); }}},
+                { id: "k07", typ: "Vliv", tag: 'Energie', popis: "TRVALÝ EFEKT: Hráč získává na začátku kola o 1 Občanskou energii méně.", detaily: "Energetická závislost na ruských dodávkách paralyzuje akceschopnost státu.", onPlay: (stav) => { log("kgb", "Závislost na ruském plynu a ropě nás dusí!"); }},
+                { id: "k08", typ: "Vliv", tag: 'Justice', popis: "TRVALÝ EFEKT: Zvyšuje cenu karty 'Spravedlivý soud' o 2.", detaily: "Justice je prolezlá agenty a korupcí. Spravedlnost je dražší a těžší.", onPlay: (stav) => { zmenHrozbu(4); log("kgb", "Justice je prolezlá agenty. Právo je slepé k ruským zločinům!"); }},
+                { id: "k09", typ: "Dezinformace", popis: "Zvyš HROZBU o 6.", detaily: "Přepisování historie a vytváření alternativní reality prostřednictvím propagandy.", onPlay: (stav) => { let hodnota = maHracPodporu("Média ve svobodných rukou") ? 3 : 6; zmenHrozbu(hodnota); log("kgb", `Ruská propaganda přepisuje dějiny! Hrozba +${hodnota}.`); }},
+                { id: "k10", typ: "Útok", popis: "Zvyš HROZBU o 5. Podívej se na karty v ruce hráče.", detaily: "Kybernetické útoky na kritickou infrastrukturu a krádeže citlivých dat.", onPlay: (stav) => { zmenHrozbu(5); log("kgb", "Hackeři z GRU útočí na naši infrastrukturu a kradou data! Hrozba +5."); }},
             ]
         };
         
-        // Doplňování názvů pro karty KGB, které v DB nejsou
+        // Add names for KGB cards
         databazeKaret.kgb.forEach(karta => {
             const nazvy = {k01: "Ruské státní drogy", k02: "Dezinformační kampaň", k03: "Vlastizrádce v parlamentu", k04: "Agent GRU na Hradě", k05: "Rozkradení státního majetku", k06: "Rozbití státu", k07: "Energetická závislost", k08: "Infiltrace justice", k09: "Historický revizionismus", k10: "Kybernetický útok"};
             karta.nazev = nazvy[karta.id];
         });
 
         let stavHry = {};
+        let currentTooltip = null;
+
+        // Tutorial functionality
+        document.getElementById('tutorial-close').addEventListener('click', function() {
+            document.getElementById('tutorial-modal').style.display = 'none';
+            localStorage.setItem('tutorial-seen', 'true');
+            inicializovatHru(); // Start the game when tutorial is closed
+        });
+
+        // Show tutorial on first visit
+        if (!localStorage.getItem('tutorial-seen')) {
+            document.getElementById('tutorial-modal').style.display = 'flex';
+        } else {
+            document.getElementById('tutorial-modal').style.display = 'none';
+        }
+
+        // Background particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            
+            function addParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 25000);
+            }
+            
+            // Create initial particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(addParticle, i * 200);
+            }
+            
+            // Continue adding particles
+            setInterval(addParticle, 800);
+        }
+
+        // Card tooltip functionality
+        function showTooltip(event, karta) {
+            const tooltip = document.getElementById('card-tooltip');
+            const title = document.getElementById('tooltip-title');
+            const content = document.getElementById('tooltip-content');
+            
+            title.textContent = karta.nazev;
+            content.innerHTML = `
+                <p><strong>Typ:</strong> ${karta.typ}</p>
+                ${karta.cena ? `<p><strong>Cena:</strong> ${karta.cena} energie</p>` : ''}
+                <p><strong>Efekt:</strong> ${karta.popis}</p>
+                ${karta.detaily ? `<p><strong>Popis:</strong> ${karta.detaily}</p>` : ''}
+            `;
+            
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+            tooltip.style.top = (rect.top - 10) + 'px';
+            tooltip.style.transform = 'translateX(-50%) translateY(-100%)';
+            
+            tooltip.classList.add('show');
+            currentTooltip = tooltip;
+        }
+
+        function hideTooltip() {
+            if (currentTooltip) {
+                currentTooltip.classList.remove('show');
+                currentTooltip = null;
+            }
+        }
 
         function inicializovatHru(pocetKaretHrac = 22) {
             document.getElementById('log-panel').innerHTML = '';
-            log('system', "Vítejte v boji za svobodu. Ruská hrozba je všudypřítomná.");
+            log('system', "🇨🇿 Vítejte v boji za svobodu. Ruská hrozba je všudypřítomná.");
 
             stavHry = {
                 kolo: 'hrac', hrozba: 20, zdroje: 3, maxZdroju: 3, postihZdroju: 0,
@@ -364,14 +1210,36 @@
         }
 
         function zamichat(pole) { for (let i = pole.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pole[i], pole[j]] = [pole[j], pole[i]]; } }
-        function log(odesilatel, zprava) { const logPanel = document.getElementById('log-panel'); const div = document.createElement('div'); div.className = `log-zprava ${odesilatel}`; div.textContent = zprava; logPanel.prepend(div); }
+        
+        function log(odesilatel, zprava) { 
+            const logPanel = document.getElementById('log-panel'); 
+            const div = document.createElement('div'); 
+            div.className = `log-zprava ${odesilatel}`; 
+            div.textContent = zprava; 
+            logPanel.prepend(div);
+        }
+        
         function maHrozbu(nazevKarty) { return stavHry.aktivniHrozby.some(k => k.nazev === nazevKarty); }
         function maHracPodporu(nazevKarty) { return stavHry.podporyHrac.some(k => k.nazev === nazevKarty); }
         function restartHry() { const pocet = document.getElementById('pocet-karet-input').value; document.getElementById('modal-overlay').style.display = 'none'; inicializovatHru(parseInt(pocet, 10)); }
 
         function zmenHrozbu(hodnota) {
             if (stavHry.gameOver) return;
+            const puvodni = stavHry.hrozba;
             stavHry.hrozba = Math.max(0, Math.min(100, stavHry.hrozba + hodnota));
+            
+            // Visual feedback for threat changes
+            const bar = document.getElementById('bar-hrozby');
+            const threatIndicator = document.getElementById('ukazatel-hrozby');
+            if (hodnota > 0) {
+                bar.classList.add('threat-increase');
+                threatIndicator.classList.add('threat-increase');
+                setTimeout(() => {
+                    bar.classList.remove('threat-increase');
+                    threatIndicator.classList.remove('threat-increase');
+                }, 800);
+            }
+            
             aktualizovatUI();
             zkontrolovatKonecHry();
         }
@@ -379,7 +1247,7 @@
         function zacitKoloHrace() {
             if (stavHry.gameOver) return;
             stavHry.kolo = 'hrac';
-            log('system', "Začíná vaše kolo. Braňte republiku!");
+            log('system', "⚡ Začíná vaše kolo. Braňte republiku!");
             detekovatPat();
             if (stavHry.gameOver) return;
 
@@ -388,12 +1256,20 @@
             if (stavHry.zdroje < 0) stavHry.zdroje = 0;
             stavHry.postihZdroju = 0;
 
+            // Energy change animation
+            const energyDisplay = document.getElementById('cislo-zdroju');
+            energyDisplay.classList.add('energy-change');
+            setTimeout(() => energyDisplay.classList.remove('energy-change'), 800);
+
             stavHry.podporyHrac.forEach(karta => {
-                if (karta.nazev === "Šíření pravdy (cibulka.net)") { zmenHrozbu(-1); log('hrac', 'Díky šíření pravdy hrozba klesá o 1.'); }
+                if (karta.nazev === "Šíření pravdy (cibulka.net)") { 
+                    zmenHrozbu(-1); 
+                    log('hrac', '📰 Díky šíření pravdy hrozba klesá o 1.'); 
+                }
             });
             
             if (stavHry.balicekHrac.length > 0) vzitKartu();
-            else log('system', "Váš balíček je prázdný, již nedobíráte karty.");
+            else log('system', "📚 Váš balíček je prázdný, již nedobíráte karty.");
 
             document.getElementById('tlacitko-kola').disabled = false;
             aktualizovatUI();
@@ -403,39 +1279,99 @@
             if (stavHry.kolo !== 'hrac' || stavHry.cilem || stavHry.gameOver) return;
             stavHry.kolo = 'kgb';
             document.getElementById('tlacitko-kola').disabled = true;
-            log('system', "Ukončili jste kolo. KGB/GRU připravuje svůj tah...");
+            log('system', "⏳ Ukončili jste kolo. KGB/GRU připravuje svůj tah...");
+            
+            // Add loading effect
+            document.getElementById('zona-kgb').classList.add('loading');
+            
             aktualizovatUI();
-            setTimeout(zacitKoloKGB, 1500);
+            setTimeout(() => {
+                document.getElementById('zona-kgb').classList.remove('loading');
+                zacitKoloKGB();
+            }, 1500);
         }
         
         async function zacitKoloKGB() {
             if (stavHry.gameOver) return;
-            log('system', "Kolo KGB/GRU začíná!");
+            log('system', "🚨 Kolo KGB/GRU začíná!");
 
             for (const karta of stavHry.aktivniHrozby) {
                 if(stavHry.gameOver) break;
-                await new Promise(resolve => setTimeout(resolve, 500));
-                if (karta.nazev === "Vlastizrádce v parlamentu") { zmenHrozbu(2); log('kgb', 'Vlastizrádce v parlamentu zvyšuje hrozbu o 2.'); }
-                if (karta.nazev === "Agent GRU na Hradě") { zmenHrozbu(3); log('kgb', 'Agent GRU na Hradě zvyšuje hrozbu o 3.'); }
+                await new Promise(resolve => setTimeout(resolve, 800));
+                if (karta.nazev === "Vlastizrádce v parlamentu") { 
+                    zmenHrozbu(2); 
+                    log('kgb', '🏛️ Vlastizrádce v parlamentu zvyšuje hrozbu o 2.'); 
+                }
+                if (karta.nazev === "Agent GRU na Hradě") { 
+                    zmenHrozbu(3); 
+                    log('kgb', '🏰 Agent GRU na Hradě zvyšuje hrozbu o 3.'); 
+                }
             }
             if (stavHry.gameOver) return;
              
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1200));
             if (stavHry.balicekKgb.length > 0) {
                 const karta = stavHry.balicekKgb.pop();
-                log('kgb', `Kreml hraje kartu: ${karta.nazev}`);
-                if (["Agent", "Vliv"].includes(karta.typ)) { stavHry.aktivniHrozby.push(karta); }
+                log('kgb', `🎯 Kreml hraje kartu: ${karta.nazev}`);
+                
+                // Show the enemy card with animation
+                await showEnemyCard(karta);
+                
+                if (["Agent", "Vliv"].includes(karta.typ)) { 
+                    stavHry.aktivniHrozby.push(karta); 
+                }
                 karta.onPlay(stavHry);
             } else {
-                log('system', 'Balíček KGB je prázdný! Jejich plány jsou vyčerpány!');
+                log('system', '📦 Balíček KGB je prázdný! Jejich plány jsou vyčerpány!');
             }
 
             aktualizovatUI();
             if (!stavHry.gameOver) setTimeout(zacitKoloHrace, 1500);
         }
 
-        function vzitKartu() { if (stavHry.balicekHrac.length > 0) stavHry.rukaHrac.push(stavHry.balicekHrac.pop()); }
-        function pridejKartuDoRuky(idKarty) { const kartaData = databazeKaret.hrac.find(k => k.id === idKarty); stavHry.rukaHrac.push({...kartaData, unikatniId: `${idKarty}_bonus_${Math.random()}`}); }
+        function showEnemyCard(karta) {
+            return new Promise((resolve) => {
+                // Hide any existing tooltips
+                hideTooltip();
+                
+                const overlay = document.getElementById('enemy-card-overlay');
+                const cardDisplay = document.getElementById('enemy-card-display');
+                const title = document.getElementById('enemy-card-title');
+                const description = document.getElementById('enemy-card-description');
+                const type = document.getElementById('enemy-card-type');
+
+                // Fill card content
+                title.textContent = karta.nazev;
+                description.textContent = karta.popis;
+                type.textContent = karta.typ;
+
+                // Show overlay
+                overlay.style.display = 'flex';
+
+                // Click to dismiss
+                function dismissCard() {
+                    overlay.style.display = 'none';
+                    overlay.removeEventListener('click', dismissCard);
+                    resolve();
+                }
+
+                // Add click listener to overlay (clicking anywhere dismisses)
+                overlay.addEventListener('click', dismissCard);
+            });
+        }
+
+        function vzitKartu() { 
+            if (stavHry.balicekHrac.length > 0) {
+                stavHry.rukaHrac.push(stavHry.balicekHrac.pop());
+                // Small animation for drawing card
+                aktualizovatUI();
+            }
+        }
+        
+        function pridejKartuDoRuky(idKarty) { 
+            const kartaData = databazeKaret.hrac.find(k => k.id === idKarty); 
+            stavHry.rukaHrac.push({...kartaData, unikatniId: `${idKarty}_bonus_${Math.random()}`}); 
+        }
 
         function zahratKartu(idKarty) {
             if (stavHry.kolo !== 'hrac' || stavHry.cilem || stavHry.gameOver) return;
@@ -443,12 +1379,31 @@
             if (indexKarty === -1) return;
             
             const karta = stavHry.rukaHrac[indexKarty];
-            if (!jeKartaHratelna(karta).hratelna) { log('system', jeKartaHratelna(karta).duvod); return; }
+            if (!jeKartaHratelna(karta).hratelna) { 
+                log('system', jeKartaHratelna(karta).duvod); 
+                return; 
+            }
+
+            // Find card element and animate it
+            const cardElements = document.querySelectorAll('.karta-hrace');
+            cardElements.forEach(el => {
+                if (el.getAttribute('data-id') === idKarty) {
+                    el.classList.add('card-play-animation');
+                }
+            });
 
             stavHry.zdroje -= vypocitejCenu(karta);
             stavHry.rukaHrac.splice(indexKarty, 1);
             if (karta.typ === "Trvalá podpora") stavHry.podporyHrac.push(karta);
+            
+            log('hrac', `🎯 Zahrávám: ${karta.nazev}`);
             karta.onPlay(stavHry);
+            
+            // Energy change animation
+            const energyDisplay = document.getElementById('cislo-zdroju');
+            energyDisplay.classList.add('energy-change');
+            setTimeout(() => energyDisplay.classList.remove('energy-change'), 800);
+            
             aktualizovatUI();
         }
 
@@ -456,7 +1411,7 @@
             if (stavHry.rukaHrac.length > 0) {
                 const index = Math.floor(Math.random() * stavHry.rukaHrac.length);
                 const odhozena = stavHry.rukaHrac.splice(index, 1)[0];
-                log('system', `Byli jste nuceni odhodit kartu: ${odhozena.nazev}`);
+                log('system', `💔 Byli jste nuceni odhodit kartu: ${odhozena.nazev}`);
                 aktualizovatUI();
             }
         }
@@ -465,12 +1420,12 @@
             const puvodniPocet = stavHry.aktivniHrozby.length;
             stavHry.aktivniHrozby = stavHry.aktivniHrozby.filter(k => !typy.includes(k.typ));
             const zniceno = puvodniPocet - stavHry.aktivniHrozby.length;
-            if (zniceno > 0) log('hrac', `Bylo zničeno ${zniceno} nepřátelských karet.`);
+            if (zniceno > 0) log('hrac', `💥 Bylo zničeno ${zniceno} nepřátelských karet.`);
             aktualizovatUI();
         }
         
         function cilitHrozbu(vlastnost, povoleneHodnoty, callback) {
-            log('system', 'Vyberte cíl na ploše KGB. Kliknutím mimo zrušíte výběr.');
+            log('system', '🎯 Vyberte cíl na ploše KGB. Kliknutím mimo zrušíte výběr.');
             stavHry.cilem = { vlastnost, povoleneHodnoty, callback };
             document.getElementById('zona-kgb').classList.add('cili');
             setTimeout(() => document.body.addEventListener('click', zrusitCileni, { once: true }), 0);
@@ -480,9 +1435,11 @@
              if (!event.target.closest('.karta-kgb')) {
                 stavHry.cilem = null;
                 document.getElementById('zona-kgb').classList.remove('cili');
-                log('system', 'Výběr cíle zrušen.');
+                log('system', '❌ Výběr cíle zrušen.');
                 aktualizovatUI();
-             } else { document.body.addEventListener('click', zrusitCileni, { once: true }); }
+             } else { 
+                document.body.addEventListener('click', zrusitCileni, { once: true }); 
+             }
         }
 
         function klikNaHrozbu(idKarty) {
@@ -493,26 +1450,34 @@
             
             if (stavHry.cilem.povoleneHodnoty.length === 0 || stavHry.cilem.povoleneHodnoty.includes(karta[stavHry.cilem.vlastnost])) {
                 stavHry.aktivniHrozby.splice(indexKarty, 1);
-                log('hrac', `Hrozba "${karta.nazev}" byla zneškodněna!`);
+                log('hrac', `💥 Hrozba "${karta.nazev}" byla zneškodněna!`);
                 if(stavHry.cilem.callback) stavHry.cilem.callback();
                 stavHry.cilem = null;
                 document.getElementById('zona-kgb').classList.remove('cili');
                 aktualizovatUI();
-            } else { log('system', `Tuto kartu nelze zacílit.`); }
+            } else { 
+                log('system', `❌ Tuto kartu nelze zacílit.`); 
+            }
         }
 
         function odhalKyvadlem() {
             if(stavHry.balicekKgb.length > 0) {
                 const odhalenaKarta = stavHry.balicekKgb.pop();
-                log('hrac', `Kyvadlo odhalilo a zničilo plán: ${odhalenaKarta.nazev}`);
+                log('hrac', `🔮 Kyvadlo odhalilo a zničilo plán: ${odhalenaKarta.nazev}`);
                 aktualizovatUI();
-            } else { log('hrac', 'Kyvadlo nenachází žádné další plány k odhalení.'); }
+            } else { 
+                log('hrac', '🔮 Kyvadlo nenachází žádné další plány k odhalení.'); 
+            }
         }
         
         function zkontrolovatKonecHry() {
             if (stavHry.gameOver) return;
-            if (stavHry.hrozba >= 100) { konecHry(false, "Genocida českého národa byla dokončena. Vládu převzali agenti Kremlu."); } 
-            else if (stavHry.hrozba <= 0) { konecHry(true, "Vytrvalým bojem a šířením pravdy jste zachránili republiku! Hrozba byla zažehnána... prozatím."); }
+            if (stavHry.hrozba >= 100) { 
+                konecHry(false, "💀 Genocida českého národa byla dokončena. Vládu převzali agenti Kremlu. Svoboda je mrtva."); 
+            } 
+            else if (stavHry.hrozba <= 0) { 
+                konecHry(true, "🏆 Vytrvalým bojem a šířením pravdy jste zachránili republiku! Hrozba byla zažehnána... prozatím. Demokracie vítězí!"); 
+            }
         }
 
         function detekovatPat() {
@@ -520,22 +1485,32 @@
             const kgbMuzeHrat = stavHry.balicekKgb.length > 0;
 
             if (!hracMuzeHrat && !kgbMuzeHrat) {
-                log('system', "Oběma stranám došly možnosti. Rozhodne pasivní vliv...");
+                log('system', "⚖️ Oběma stranám došly možnosti. Rozhodne pasivní vliv...");
                 let vliv = 0;
-                stavHry.podporyHrac.forEach(k => { if (k.nazev === "Šíření pravdy (cibulka.net)") vliv--; });
+                stavHry.podporyHrac.forEach(k => { 
+                    if (k.nazev === "Šíření pravdy (cibulka.net)") vliv--; 
+                });
                 stavHry.aktivniHrozby.forEach(k => {
                     if (k.nazev === "Vlastizrádce v parlamentu") vliv += 2;
                     if (k.nazev === "Agent GRU na Hradě") vliv += 3;
                 });
                 
-                if (vliv < 0) { konecHry(true, "I v patové situaci váš trvalý vliv stačil k odvrácení zkázy. Vítězíte!"); }
-                else { konecHry(false, "Národ upadl do apatie a bez další akce pomalu podlehl vlivu Kremlu. Prohráváte."); }
+                if (vliv < 0) { 
+                    konecHry(true, "🎯 I v patové situaci váš trvalý vliv stačil k odvrácení zkázy. Vítězíte!"); 
+                }
+                else { 
+                    konecHry(false, "😴 Národ upadl do apatie a bez další akce pomalu podlehl vlivu Kremlu. Prohráváte."); 
+                }
             }
         }
 
         function konecHry(vyhra, zprava) {
             if (stavHry.gameOver) return;
             stavHry.gameOver = true;
+            
+            // Disable all interactions
+            hideTooltip();
+            
             const modal = document.getElementById('modal-overlay');
             const title = document.getElementById('modal-title');
             const text = document.getElementById('modal-text');
@@ -553,57 +1528,91 @@
         }
 
         function jeKartaHratelna(karta) {
-            if (stavHry.zdroje < vypocitejCenu(karta)) return { hratelna: false, duvod: "Nedostatek energie."};
+            if (stavHry.zdroje < vypocitejCenu(karta)) return { hratelna: false, duvod: "⚡ Nedostatek energie."};
             if (stavHry.kolo !== 'hrac' || stavHry.cilem) return { hratelna: false, duvod: "" };
             
             const maCilTyp = !karta.cileTyp || stavHry.aktivniHrozby.some(h => karta.cileTyp.length === 0 || karta.cileTyp.includes(h.typ));
             const maCilTag = !karta.cileTag || stavHry.aktivniHrozby.some(h => karta.cileTag.includes(h.tag));
 
-            if (!maCilTyp || !maCilTag) return { hratelna: false, duvod: "Žádný platný cíl na ploše."};
+            if (!maCilTyp || !maCilTag) return { hratelna: false, duvod: "🎯 Žádný platný cíl na ploše."};
 
             return { hratelna: true };
         }
 
         function aktualizovatUI() {
+            // Update threat bar
             document.getElementById('bar-hrozby').style.width = stavHry.hrozba + '%';
             document.getElementById('text-hrozby').textContent = `HROZBA PRO REPUBLIKU: ${stavHry.hrozba}%`;
+            
+            // Update resources
             document.getElementById('cislo-zdroju').textContent = `${stavHry.zdroje}/${stavHry.maxZdroju}`;
+            
+            // Update deck counts
             document.getElementById('pocet-hrac').textContent = stavHry.balicekHrac.length;
             document.getElementById('pocet-kgb').textContent = stavHry.balicekKgb.length;
             
+            // Update player hand
             const rukaDiv = document.getElementById('ruka-hrace');
             rukaDiv.innerHTML = '';
             stavHry.rukaHrac.forEach(karta => {
                 const hratelnost = jeKartaHratelna(karta);
-                rukaDiv.innerHTML += `
-                    <div class="karta karta-hrace ${!hratelnost.hratelna ? 'nehratelna' : ''}" onclick="zahratKartu('${karta.unikatniId}')" title="${hratelnost.duvod}">
-                        <div class="karta-cena">${vypocitejCenu(karta)}</div>
-                        <div class="karta-nazev">${karta.nazev}</div>
-                        <div class="karta-popis">${karta.popis}</div>
-                        <div class="karta-typ">${karta.typ}</div>
-                    </div>
+                const kartaDiv = document.createElement('div');
+                kartaDiv.className = `karta karta-hrace ${!hratelnost.hratelna ? 'nehratelna' : ''}`;
+                kartaDiv.setAttribute('data-id', karta.unikatniId);
+                kartaDiv.title = hratelnost.duvod;
+                kartaDiv.innerHTML = `
+                    <div class="karta-cena">${vypocitejCenu(karta)}</div>
+                    <div class="karta-nazev">${karta.nazev}</div>
+                    <div class="karta-popis">${karta.popis}</div>
+                    <div class="karta-typ">${karta.typ}</div>
                 `;
+                
+                kartaDiv.addEventListener('click', () => zahratKartu(karta.unikatniId));
+                kartaDiv.addEventListener('mouseenter', (e) => showTooltip(e, karta));
+                kartaDiv.addEventListener('mouseleave', hideTooltip);
+                
+                rukaDiv.appendChild(kartaDiv);
             });
 
+            // Update threats and supports
             const hrozbyDiv = document.getElementById('aktivni-hrozby');
             hrozbyDiv.innerHTML = '';
             [...stavHry.aktivniHrozby, ...stavHry.podporyHrac].forEach(karta => {
                 const jePodpora = stavHry.podporyHrac.some(p => p.unikatniId === karta.unikatniId);
-                const trida = jePodpora ? 'karta-hrace' : 'karta-kgb';
-                const styl = jePodpora ? 'border-style: dashed;' : '';
-                const clickHandler = jePodpora ? '' : `onclick="klikNaHrozbu('${karta.unikatniId}')"`;
-                
-                hrozbyDiv.innerHTML += `
-                    <div class="karta ${trida}" ${clickHandler} style="${styl}" title="${karta.popis}">
-                        <div class="karta-nazev">${karta.nazev}</div>
-                        <div class="karta-popis">${karta.popis}</div>
-                        <div class="karta-typ">${karta.typ}</div>
-                    </div>
+                const kartaDiv = document.createElement('div');
+                kartaDiv.className = `karta ${jePodpora ? 'karta-hrace' : 'karta-kgb'}`;
+                kartaDiv.style.borderStyle = jePodpora ? 'dashed' : 'solid';
+                kartaDiv.title = karta.popis;
+                kartaDiv.innerHTML = `
+                    <div class="karta-nazev">${karta.nazev}</div>
+                    <div class="karta-popis">${karta.popis}</div>
+                    <div class="karta-typ">${karta.typ}</div>
                 `;
+                
+                if (!jePodpora) {
+                    kartaDiv.addEventListener('click', () => klikNaHrozbu(karta.unikatniId));
+                }
+                
+                kartaDiv.addEventListener('mouseenter', (e) => showTooltip(e, karta));
+                kartaDiv.addEventListener('mouseleave', hideTooltip);
+                
+                hrozbyDiv.appendChild(kartaDiv);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => inicializovatHru());
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            
+            // Start game immediately if tutorial was already seen
+            if (localStorage.getItem('tutorial-seen')) {
+                inicializovatHru();
+            }
+            // If tutorial hasn't been seen, game will start when tutorial is closed
+        });
+
+        // Hide tooltip when clicking elsewhere
+        document.addEventListener('click', hideTooltip);
     </script>
 </body>
 </html>
